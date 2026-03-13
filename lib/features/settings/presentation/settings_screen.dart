@@ -23,7 +23,7 @@ class SettingsScreen extends ConsumerWidget {
               SwitchListTile(
                 title: const Text('Dark mode'),
                 value: settings.isDarkMode,
-                onChanged: (value) => ref.read(settingsControllerProvider.notifier).update(settings.copyWith(isDarkMode: value)),
+                onChanged: (value) => ref.read(settingsControllerProvider.notifier).applySettings(settings.copyWith(isDarkMode: value)),
               ),
               SwitchListTile(
                 title: const Text('Notifications'),
@@ -32,7 +32,7 @@ class SettingsScreen extends ConsumerWidget {
                 onChanged: (value) async {
                   final next = settings.copyWith(notificationsEnabled: value);
                   try {
-                    await ref.read(settingsControllerProvider.notifier).update(next);
+                    await ref.read(settingsControllerProvider.notifier).applySettings(next);
                     final granted = await ref.read(notificationServiceProvider).syncPermissionAndToken(enabled: value);
                     if (value && !granted && context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -61,7 +61,7 @@ class SettingsScreen extends ConsumerWidget {
                   value: settings.audioSpeed,
                   onChanged: (value) => ref
                       .read(settingsControllerProvider.notifier)
-                      .update(settings.copyWith(audioSpeed: value.clamp(0.75, 2.0))),
+                      .applySettings(settings.copyWith(audioSpeed: value.clamp(0.75, 2.0))),
                 ),
               ),
               ListTile(
@@ -77,7 +77,7 @@ class SettingsScreen extends ConsumerWidget {
                   value: settings.dailyGoal.toDouble(),
                   onChanged: (value) async {
                     final nextGoal = value.round();
-                    await ref.read(settingsControllerProvider.notifier).update(settings.copyWith(dailyGoal: nextGoal));
+                    await ref.read(settingsControllerProvider.notifier).applySettings(settings.copyWith(dailyGoal: nextGoal));
                     await ref.read(userStatsServiceProvider).syncDailyGoal(nextGoal);
                   },
                 ),

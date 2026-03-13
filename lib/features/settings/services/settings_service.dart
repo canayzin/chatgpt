@@ -43,7 +43,7 @@ class SettingsController extends AsyncNotifier<SettingsState> {
     return ref.read(settingsServiceProvider).load();
   }
 
-  Future<void> update(SettingsState next) async {
+  Future<void> applySettings(SettingsState next) async {
     final previous = state.valueOrNull ?? SettingsState.defaults();
     state = AsyncData(next);
     try {
