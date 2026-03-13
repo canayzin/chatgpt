@@ -1,0 +1,7 @@
+{
+  "appEnv": "staging",
+  "firebaseProjectId": "ai-learn-staging",
+  "apiBaseUrl": "https://us-central1-ai-learn-staging.cloudfunctions.net",
+  "enableCrashlytics": true,
+  "enablePerformanceMonitoring": true
+}

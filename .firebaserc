@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "ai-learn-dev",
+    "development": "ai-learn-dev",
+    "staging": "ai-learn-staging",
+    "production": "ai-learn-prod"
+  }
+}

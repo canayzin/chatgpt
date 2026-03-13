@@ -1,0 +1,7 @@
+{
+  "appEnv": "production",
+  "firebaseProjectId": "ai-learn-prod",
+  "apiBaseUrl": "https://us-central1-ai-learn-prod.cloudfunctions.net",
+  "enableCrashlytics": true,
+  "enablePerformanceMonitoring": true
+}
