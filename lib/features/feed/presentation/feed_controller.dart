@@ -1,5 +1,6 @@
+import 'dart:developer' as developer;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/knowledge_repository.dart';
@@ -48,6 +49,10 @@ class FeedController extends FamilyAsyncNotifier<FeedState, FeedQuery> {
 
   Future<FeedState> _fetchInitial() async {
     final page = await _fetchPage();
+    developer.log(
+      'FeedState items=${page.items.length} firstBaslik=${page.items.isEmpty ? '-' : page.items.first.baslik}',
+      name: 'FeedController._fetchInitial',
+    );
     return FeedState(
       items: _injectAds(page.items),
       hasMore: page.hasMore,
@@ -87,15 +92,6 @@ class FeedController extends FamilyAsyncNotifier<FeedState, FeedQuery> {
 
   Future<FeedPage> _fetchPage({DocumentSnapshot<Map<String, dynamic>>? lastDocument}) {
     final repository = ref.read(knowledgeRepositoryProvider);
-    final usePersonalized = _query.personalized && (_query.category == null || _query.category!.isEmpty);
-
-    if (usePersonalized) {
-      final userId = FirebaseAuth.instance.currentUser?.uid;
-      if (userId != null) {
-        return repository.getPersonalizedKnowledgePage(userId: userId, lastDocument: lastDocument);
-      }
-    }
-
     return repository.getKnowledgePage(
       lastDocument: lastDocument,
       category: _query.category,

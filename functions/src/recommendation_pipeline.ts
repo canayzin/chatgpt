@@ -55,40 +55,46 @@ export const recomputeUserFeedScores = functions.https.onCall(async (data) => {
   const profile = profileSnap.data() ?? {};
   const categoryAffinity = (profile.categoryAffinity ?? {}) as Record<string, number>;
 
-  const scored: FeedScore[] = knowledgeSnap.docs.map((doc) => {
-    const card = doc.data() as Record<string, any>;
-    const category = String(card.category || 'general').toLowerCase();
-    const favorites = Number(card.favoriteCount || 0);
-    const reads = Number(card.readCount || 0);
-    const qualityScore = Number(card.qualityScore || 0);
-    const viralityScore = Number(card.viralityScore || 0);
-    const engagementScore = Number(card.engagementScore || 0);
-    const createdAt = card.createdAt?.toDate?.() as Date | undefined;
+  const scored: FeedScore[] = knowledgeSnap.docs
+    .map((doc) => {
+      const card = doc.data() as Record<string, any>;
+      const category = String(card.kategori || card.category || 'general').toLowerCase();
+      if (!isPrimaryRecommendationCandidate(doc.id, category)) {
+        return null;
+      }
 
-    const categoryPreferenceScore = Number(categoryAffinity[category] || 0) * 0.7;
-    const recencyBoost = computeRecencyBoost(createdAt ?? new Date(0));
+      const favorites = Number(card.favoriteCount || 0);
+      const reads = Number(card.readCount || 0);
+      const qualityScore = Number(card.qualityScore || 0);
+      const viralityScore = Number(card.viralityScore || 0);
+      const engagementScore = Number(card.engagementScore || 0);
+      const createdAt = card.createdAt?.toDate?.() as Date | undefined;
 
-    const score =
-      engagementScore * 10 +
-      favorites * 1.8 +
-      reads * 0.35 +
-      categoryPreferenceScore +
-      qualityScore * 12 +
-      viralityScore * 10 +
-      recencyBoost;
+      const categoryPreferenceScore = Number(categoryAffinity[category] || 0) * 0.7;
+      const recencyBoost = computeRecencyBoost(createdAt ?? new Date(0));
 
-    return {
-      knowledgeId: doc.id,
-      score,
-      components: {
-        engagementScore,
-        categoryPreferenceScore,
-        recencyBoost,
-        qualityScore,
-        viralityScore,
-      },
-    };
-  });
+      const score =
+        engagementScore * 10 +
+        favorites * 1.8 +
+        reads * 0.35 +
+        categoryPreferenceScore +
+        qualityScore * 12 +
+        viralityScore * 10 +
+        recencyBoost;
+
+      return {
+        knowledgeId: doc.id,
+        score,
+        components: {
+          engagementScore,
+          categoryPreferenceScore,
+          recencyBoost,
+          qualityScore,
+          viralityScore,
+        },
+      };
+    })
+    .filter((item): item is FeedScore => item !== null);
 
   scored.sort((a, b) => b.score - a.score);
 
@@ -135,4 +141,9 @@ function computeRecencyBoost(createdAt: Date): number {
   if (ageHours <= 72) return 10;
   if (ageHours <= 168) return 5;
   return 1;
+}
+
+function isPrimaryRecommendationCandidate(knowledgeId: string, category: string): boolean {
+  if (knowledgeId.startsWith('psy_')) return true;
+  return category === 'psikoloji';
 }

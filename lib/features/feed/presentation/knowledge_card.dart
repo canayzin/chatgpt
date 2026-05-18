@@ -53,7 +53,7 @@ class _KnowledgeCardState extends State<KnowledgeCard> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        widget.item.category.toUpperCase(),
+                        widget.item.kategori.toUpperCase(),
                         style: theme.textTheme.labelMedium,
                       ),
                     ),
@@ -76,18 +76,18 @@ class _KnowledgeCardState extends State<KnowledgeCard> {
               ),
               const SizedBox(height: 14),
               Text(
-                widget.item.question,
+                widget.item.baslik,
                 style: theme.textTheme.headlineSmall,
               ),
               const SizedBox(height: 12),
-              Text(widget.item.shortAnswer),
+              Text(widget.item.kisaIcerik),
               AnimatedCrossFade(
                 duration: const Duration(milliseconds: 200),
                 crossFadeState: _showDetails ? CrossFadeState.showSecond : CrossFadeState.showFirst,
                 firstChild: const SizedBox.shrink(),
                 secondChild: Padding(
                   padding: const EdgeInsets.only(top: 12),
-                  child: Text(widget.item.details ?? ''),
+                  child: Text(widget.item.detayIcerik),
                 ),
               ),
               const Spacer(),
@@ -101,7 +101,7 @@ class _KnowledgeCardState extends State<KnowledgeCard> {
                     label: const Text('Listen'),
                   ),
                   OutlinedButton.icon(
-                    onPressed: (widget.item.details ?? '').isEmpty
+                    onPressed: widget.item.detayIcerik.isEmpty
                         ? null
                         : () {
                             setState(() => _showDetails = !_showDetails);
