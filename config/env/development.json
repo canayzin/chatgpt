@@ -1,0 +1,7 @@
+{
+  "appEnv": "development",
+  "firebaseProjectId": "ai-learn-dev",
+  "apiBaseUrl": "https://us-central1-ai-learn-dev.cloudfunctions.net",
+  "enableCrashlytics": false,
+  "enablePerformanceMonitoring": false
+}

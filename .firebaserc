@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "ai-learn-2936a",
+    "development": "ai-learn-2936a",
+    "staging": "ai-learn-staging",
+    "production": "ai-learn-prod"
+  }
+}
