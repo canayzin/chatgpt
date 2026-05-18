@@ -81,16 +81,35 @@ class _KnowledgeCardState extends State<KnowledgeCard> {
               ),
               const SizedBox(height: 12),
               Text(widget.item.kisaIcerik),
-              AnimatedCrossFade(
-                duration: const Duration(milliseconds: 200),
-                crossFadeState: _showDetails ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                firstChild: const SizedBox.shrink(),
-                secondChild: Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: Text(widget.item.detayIcerik),
+              if (_showDetails) ...[
+                const SizedBox(height: 12),
+                Text(
+                  'Detayı okumak için aşağı kaydır. Karta dönmek için Hide details’a dokun.',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
-              ),
-              const Spacer(),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(widget.item.detayIcerik),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Okumayı bitirdiysen Hide details’a dokunarak karta dönebilirsin.',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ] else
+                const Spacer(),
+              const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
