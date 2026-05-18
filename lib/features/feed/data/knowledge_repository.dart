@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,21 +45,23 @@ class FirebaseKnowledgeRepository implements KnowledgeRepository {
     String? category,
   }) async {
     Query<Map<String, dynamic>> query =
-        _firestore.collection('knowledge_cards').orderBy('createdAt', descending: true).limit(limit);
-
-    if (category != null && category.isNotEmpty) {
-      query = query.where('category', isEqualTo: category);
-    }
+        _firestore.collection('knowledge_cards').where('kategori', isEqualTo: 'psikoloji').orderBy('sira').limit(limit);
 
     if (lastDocument != null) {
       query = query.startAfterDocument(lastDocument);
     }
 
-    final snapshot = await query.get(const GetOptions(source: Source.serverAndCache));
+    final snapshot = await query.get(const GetOptions(source: Source.server));
     final docs = snapshot.docs;
+    final selected = docs.map(KnowledgeModel.fromFirestore).toList();
+
+    developer.log(
+      selected.isEmpty ? 'NO PSYCHOLOGY DATA FOUND' : 'FIRST ITEM: ${selected.first.id} - ${selected.first.baslik}',
+      name: 'FirebaseKnowledgeRepository.getKnowledgePage',
+    );
 
     return FeedPage(
-      items: docs.map(KnowledgeModel.fromFirestore).toList(),
+      items: selected,
       hasMore: docs.length == limit,
       lastDocument: docs.isEmpty ? lastDocument : docs.last,
     );
@@ -171,15 +175,25 @@ class FirebaseKnowledgeRepository implements KnowledgeRepository {
 
   @override
   Future<KnowledgeModel?> getKnowledgeOfDay() async {
-    final snapshot = await _firestore
+    final dailyFlagSnapshot = await _firestore
         .collection('knowledge_cards')
         .where('isDailyKnowledge', isEqualTo: true)
-        .orderBy('createdAt', descending: true)
         .limit(1)
-        .get(const GetOptions(source: Source.serverAndCache));
+        .get(const GetOptions(source: Source.server));
 
-    if (snapshot.docs.isEmpty) return null;
-    return KnowledgeModel.fromFirestore(snapshot.docs.first);
+    if (dailyFlagSnapshot.docs.isNotEmpty) {
+      return KnowledgeModel.fromFirestore(dailyFlagSnapshot.docs.first);
+    }
+
+    final psikolojiFallback = await _firestore
+        .collection('knowledge_cards')
+        .where('kategori', isEqualTo: 'psikoloji')
+        .orderBy('sira')
+        .limit(1)
+        .get(const GetOptions(source: Source.server));
+
+    if (psikolojiFallback.docs.isEmpty) return null;
+    return KnowledgeModel.fromFirestore(psikolojiFallback.docs.first);
   }
 
   @override
