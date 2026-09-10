@@ -1,0 +1,10 @@
+{
+  "name": "ai-learn-content-tools",
+  "private": true,
+  "scripts": {
+    "content:check": "node scripts/import_knowledge.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.4.0"
+  }
+}
