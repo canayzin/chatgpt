@@ -1,0 +1,10 @@
+{
+  "name": "ai-learn-maintenance",
+  "private": true,
+  "scripts": {
+    "import:knowledge": "node scripts/import_knowledge.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.4.0"
+  }
+}
