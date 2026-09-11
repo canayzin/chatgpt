@@ -8,3 +8,17 @@ firebase-adminsdk*.json
 *service-account-key*.json
 *private-key*.json
 credentials/
+
+# Flutter / Dart generated
+.dart_tool/
+.flutter-plugins-dependencies
+build/
+
+# IDE
+.idea/
+*.iml
+
+# Android local/generated
+android/.gradle/
+android/.kotlin/
+android/local.properties
