@@ -2,14 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 const appCategories = [
-  'psychology',
-  'finance',
+  'psikoloji',
+  'finans',
   'manipulation',
   'entrepreneurship',
   'interesting_facts',
   'cognitive_biases',
   'genel_kultur_ve_merak',
 ];
+
+String _categoryLabel(String category) {
+  switch (category) {
+    case 'psikoloji':
+      return 'Psikoloji';
+    case 'finans':
+      return 'Finans';
+    case 'manipulation':
+      return 'Manip\u00fclasyon';
+    case 'entrepreneurship':
+      return 'Giri\u015fimcilik';
+    case 'interesting_facts':
+      return '\u0130lgin\u00e7 Bilgiler';
+    case 'cognitive_biases':
+      return 'Bili\u015fsel \u00d6nyarg\u0131lar';
+    case 'genel_kultur_ve_merak':
+      return 'Genel K\u00fclt\u00fcr ve Merak';
+    default:
+      return category.replaceAll('_', ' ').toUpperCase();
+  }
+}
 
 class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen({super.key});
@@ -43,7 +64,7 @@ class CategoriesScreen extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        category.replaceAll('_', ' ').toUpperCase(),
+                        _categoryLabel(category),
                         textAlign: TextAlign.center,
                       ),
                     ),
