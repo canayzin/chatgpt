@@ -44,8 +44,9 @@ class FirebaseKnowledgeRepository implements KnowledgeRepository {
     int limit = 20,
     String? category,
   }) async {
+    final selectedCategory = category ?? 'psikoloji';
     Query<Map<String, dynamic>> query =
-        _firestore.collection('knowledge_cards').where('kategori', isEqualTo: 'psikoloji').orderBy('sira').limit(limit);
+        _firestore.collection('knowledge_cards').where('kategori', isEqualTo: selectedCategory).orderBy('sira').limit(limit);
 
     if (lastDocument != null) {
       query = query.startAfterDocument(lastDocument);

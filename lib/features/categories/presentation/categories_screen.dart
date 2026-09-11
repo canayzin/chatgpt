@@ -8,6 +8,7 @@ const appCategories = [
   'entrepreneurship',
   'interesting_facts',
   'cognitive_biases',
+  'genel_kultur_ve_merak',
 ];
 
 class CategoriesScreen extends StatelessWidget {
@@ -36,7 +37,9 @@ class CategoriesScreen extends StatelessWidget {
                   child: Ink(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
                     ),
                     child: Center(
                       child: Text(
